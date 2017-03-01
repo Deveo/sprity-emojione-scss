@@ -6,12 +6,21 @@ $sprity-emojione-sprites: (
   {{~/each~}}
 );
 
+.emojione {
+  display: inline-block;
+  background-repeat: no-repeat;
+  font-size: inherit;
+  line-height: normal;
+  text-indent: -9999em;
+  vertical-align: middle;
+}
+
 @mixin sprity-emojione-position ($size) {
   // each with index
   @for $i from 1 through length($sprity-emojione-sprites) {
     $sprite: nth($sprity-emojione-sprites, $i);
 
-    &-#{$sprite} {
+    .emojione-#{$sprite} {
       background-position: 0 #{- ($i - 1) * $size};
     }
   }
@@ -29,26 +38,22 @@ $sprity-emojione-sprites: (
   }
 }
 
-@mixin sprity-emojione ($sizes, $path) {
+@mixin sprity-emojione ($size-unitless, $path, $retina: ()) {
+  $size-px: $size-unitless * 1px;
+
   .emojione {
-    @each $multiplier, $size-unitless in $sizes {
-      $size-px: $size-unitless * 1px;
+    width:  $size-px;
+    height: $size-px;
 
-      @if $multiplier == 1 {
+    background-image: url("#{$path}/sprite-#{$size-unitless}.png");
+    background-size:  $size-px;
 
-        width: $size-px;
-        height: $size-px;
+    @each $multiplier, $size-unitless in $retina {
+      @include sprity-emojione-media($multiplier) {
         background-image: url("#{$path}/sprite-#{$size-unitless}.png");
-        background-size: $size-px;
-        @include sprity-emojione-position($size-px);
-
-      } @else {
-
-        @include sprity-emojione-media($multiplier) {
-          background-image: url("#{$path}/sprite@#{$size-unitless * $multiplier}x.png");
-        }
-
       }
     }
   }
+
+  @include sprity-emojione-position($size-px);
 }
