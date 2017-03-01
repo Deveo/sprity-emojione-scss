@@ -1,6 +1,8 @@
-node_modules
-coverage
+/node_modules/
+/coverage/
 .DS_Store
 *.log
-test/dist
+/test/dist/
 npm-debug.log
+/.idea/
+/*.iml

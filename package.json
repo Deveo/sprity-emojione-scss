@@ -1,25 +1,25 @@
 {
-  "name": "sprity-sass",
-  "version": "1.0.4",
-  "description": "scss/sass style processor for sprity",
+  "name": "sprity-emojione-scss",
+  "version": "0.1.0",
+  "description": "scss style processor for sprity designed for EmojiOne",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sprity/sprity-sass.git"
+    "url": "https://github.com/Deveo/sprity-emojione-scss.git"
   },
-  "homepage": "https://github.com/sprity/sprity-sass",
+  "homepage": "https://github.com/Deveo/sprity-emojione-scss",
   "bugs": {
-    "url": "https://github.com/sprity/sprity-sass/issues"
+    "url": "https://github.com/Deveo/sprity-emojione-scss/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/sprity/sprity-sass/blob/master/LICENSE-MIT"
+      "url": "https://github.com/Deveo/sprity-emojione-scss/blob/master/LICENSE-MIT"
     }
   ],
   "author": {
-    "name": "Alexander Slansky",
-    "email": "alexander@slansky.net",
-    "url": "http://slansky.net"
+    "name": "Andrey Mikhaylov",
+    "email": "lolmaus@gmail.com",
+    "url": "http://lolma.us"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -36,7 +36,8 @@
     "scss",
     "sass",
     "sprity",
-    "css-sprite"
+    "css-sprite",
+    "emojione"
   ],
   "dependencies": {
     "bluebird": "^2.9.24",

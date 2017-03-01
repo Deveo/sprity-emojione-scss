@@ -1,55 +1,54 @@
-{{#each layouts}}
-  {{#each layout.items}}
-    ${{#if ../../opt.split}}{{cssesc ../../name}}-{{/if}}{{cssesc meta.name}}: -{{baseDim x}}px -{{baseDim y}}px {{baseDim width}}px {{baseDim height}}px;
-  {{/each}}
-{{/each}}
+$sprity-emojione-sprites: (
+  {{~#each layouts~}}
+    {{~#each layout.items~}}
+      "{{meta.name}}",
+    {{~/each~}}
+  {{~/each~}}
+);
 
-@mixin sprite-width($sprite) {
-  width: nth($sprite, 3);
-}
+@mixin sprity-emojione-position ($size) {
+  // each with index
+  @for $i from 1 through length($sprity-emojione-sprites) {
+    $sprite: nth($sprity-emojione-sprites, $i);
 
-@mixin sprite-height($sprite) {
-  height: nth($sprite, 4);
-}
-
-@function sprite-width($sprite) {
-  @return nth($sprite, 3);
-}
-
-@function sprite-height($sprite) {
-  @return nth($sprite, 4);
-}
-
-@mixin sprite-position($sprite) {
-  $sprite-offset-x: nth($sprite, 1);
-  $sprite-offset-y: nth($sprite, 2);
-  background-position: $sprite-offset-x  $sprite-offset-y;
-}
-
-@mixin sprite($sprite, $display: block) {
-  @include sprite-position($sprite);
-  background-repeat: no-repeat;
-  overflow: hidden;
-  display: $display;
-  @include sprite-width($sprite);
-  @include sprite-height($sprite);
-}
-
-{{#each layouts}}
-  {{#each sprites}}
-
-    {{#if dpi}}
-    @media (-webkit-min-device-pixel-ratio: {{ratio}}), (min-resolution: {{dpi}}dpi) {
-    {{/if}}
-    {{../../indicator}}{{cssesc ../classname}} {
-      background-image: url('{{escimage url}}');
-      {{#if dpi}}
-      background-size: {{baseWidth}}px {{baseHeight}}px;
-      {{/if}}
+    &-#{$sprite} {
+      background-position: 0 #{- ($i - 1) * $size};
     }
-    {{#if dpi}}
-    }
-    {{/if}}
-  {{/each}}
+  }
+}
 
-{{/each}}
+@mixin sprity-emojione-media ($multiplier, $base: 96) {
+  @media
+  only screen and (-webkit-min-device-pixel-ratio: #{$multiplier}),
+  only screen and (        min-device-pixel-ratio: #{$multiplier}),
+  only screen and (                min-resolution: #{$multiplier * $base}dpi),
+  only screen and (                min-resolution: #{$multiplier}dppx) {
+
+    @content;
+
+  }
+}
+
+@mixin sprity-emojione ($sizes, $path) {
+  .emojione {
+    @each $multiplier, $size-unitless in $sizes {
+      $size-px: $size-unitless * 1px;
+
+      @if $multiplier == 1 {
+
+        width: $size-px;
+        height: $size-px;
+        background-image: url("#{$path}/sprite-#{$size-unitless}.png");
+        background-size: $size-px;
+        @include sprity-emojione-position($size-px);
+
+      } @else {
+
+        @include sprity-emojione-media($multiplier) {
+          background-image: url("#{$path}/sprite@#{$size-unitless * $multiplier}x.png");
+        }
+
+      }
+    }
+  }
+}

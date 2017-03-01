@@ -5,8 +5,7 @@ var fs = Promise.promisifyAll(require('fs-extra'));
 var path = require('path');
 
 var getTemplate = function (opt) {
-  var type = opt['style-type'] ? opt['style-type'] : 'scss';
-  return fs.readFileAsync(path.join(__dirname, 'template', type + '.hbs'), 'utf8');
+  return fs.readFileAsync(path.join(__dirname, 'template', 'scss.hbs'), 'utf8');
 };
 
 var transform = Promise.method(function (layouts, source, opt, Handlebars) {
@@ -27,12 +26,9 @@ module.exports = {
       });
   },
   isBeautifyable: function (opt) {
-    if (opt['style-type'] && opt['style-type'] === 'sass') {
-      return false;
-    }
-    return true;
+    return false;
   },
   extension: function (opt) {
-    return opt['style-type'] ? opt['style-type'] : 'scss';
+    return 'scss';
   }
 };
