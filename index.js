@@ -20,6 +20,10 @@ var transform = Promise.method(function (layouts, source, opt, Handlebars) {
 
 module.exports = {
   process: function (layouts, opt, Handlebars) {
+    Handlebars.registerHelper('divide', function (dividend, divisor) {
+      return dividend / divisor;
+    });
+
     return getTemplate(opt)
       .then(function (source) {
         return transform(layouts, source, opt, Handlebars);

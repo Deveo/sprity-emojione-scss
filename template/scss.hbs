@@ -1,7 +1,7 @@
 $sprity-emojione-sprites: (
   {{~#each layouts~}}
     {{~#each layout.items~}}
-      "{{meta.name}}",
+      "{{meta.name}}":(x:{{divide x width}},y:{{divide y height}}),
     {{~/each~}}
   {{~/each~}}
 );
@@ -15,13 +15,23 @@ $sprity-emojione-sprites: (
   vertical-align: middle;
 }
 
-@mixin sprity-emojione-position ($size) {
-  // each with index
-  @for $i from 1 through length($sprity-emojione-sprites) {
-    $sprite: nth($sprity-emojione-sprites, $i);
+@function sqrt($r) {
+  $x0: 1;
+  $x1: $x0;
 
-    .emojione-#{$sprite} {
-      background-position: 0 #{- ($i - 1) * $size};
+  @for $i from 1 through 10 {
+    $x1: $x0 - ($x0 * $x0 - abs($r)) / (2 * $x0);
+    $x0: $x1;
+  }
+
+  @return $x1;
+}
+
+@mixin sprity-emojione-position ($size) {
+  @each $sprite-name, $position in $sprity-emojione-sprites {
+    .emojione-#{$sprite-name} {
+      background-position-x: - map-get($position, 'x') * $size;
+      background-position-y: - map-get($position, 'y') * $size;
     }
   }
 }
@@ -46,7 +56,7 @@ $sprity-emojione-sprites: (
     height: $size-px;
 
     background-image: url("#{$path}/sprite-#{$size-unitless}.png");
-    background-size:  $size-px;
+    background-size:  ceil(sqrt(length($sprity-emojione-sprites))) * $size-px;
 
     @each $multiplier, $size-unitless in $retina {
       @include sprity-emojione-media($multiplier) {
